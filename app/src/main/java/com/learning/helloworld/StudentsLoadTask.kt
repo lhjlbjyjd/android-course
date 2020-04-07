@@ -16,9 +16,8 @@ class StudentsLoadTask(
         if (params.isNullOrEmpty()) {
             return emptyList()
         }
-        val file = params[0]!!
-        Thread.sleep(10000)
-        return StudentLoader.loadStudents(file)
+        params[0]?.let { return StudentLoader.loadStudents(it) }
+        return emptyList()
     }
 
     // UI THREAD

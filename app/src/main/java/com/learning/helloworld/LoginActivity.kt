@@ -4,45 +4,40 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.edit
+import kotlinx.android.synthetic.main.activity_login.*
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
-
-    var realLogin : String = ""
-    var realPassword : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val loginEdit = findViewById<EditText>(R.id.loginEditText)
-        val passwordEdit = findViewById<EditText>(R.id.passwordEditText)
-        val confirmButton = findViewById<Button>(R.id.confirmButton)
-        val registerButton = findViewById<Button>(R.id.registerButton)
-
         val preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        realLogin = preferences.getString(KEY_LOGIN, "")!!
-        realPassword = preferences.getString(KEY_PASSWORD, "")!!
 
         registerButton.setOnClickListener {
-            val login = loginEdit.text.toString()
-            val password = passwordEdit.text.toString()
-            val preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            val editor = preferences.edit()
-            editor.putString(KEY_LOGIN, login)
-            editor.putString(KEY_PASSWORD, password)
-            editor.apply()
+            preferences.edit {
+                val passwordMD5 = String.format("%032x", BigInteger(1, MessageDigest.getInstance("MD5")
+                    .digest("${passwordEditText.text}".toByteArray(Charsets.UTF_8)))
+                )
+                putString(KEY_LOGIN, loginEditText.text.toString())
+                putString(KEY_PASSWORD, passwordMD5)
+            }
         }
 
         confirmButton.setOnClickListener {
-            val login = loginEdit.text.toString()
-            val password = passwordEdit.text.toString()
+            val realLogin = preferences.getString(KEY_LOGIN, "") ?: ""
+            val realPasswordMD5 = preferences.getString(KEY_PASSWORD, "") ?: ""
+            val login = loginEditText.text.toString()
+            val passwordMD5 = String.format("%032x", BigInteger(1, MessageDigest.getInstance("MD5")
+                .digest("${passwordEditText.text}".toByteArray(Charsets.UTF_8)))
+            )
 
             if (login == realLogin) {
-                if (password == realPassword) {
+                if (passwordMD5 == realPasswordMD5) {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra(KEY_LOGIN, login)
                     startActivity(intent)

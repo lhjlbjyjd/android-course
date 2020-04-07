@@ -19,9 +19,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStudentCard(student: Student) {
-        val studentCardFragment = StudentCardFragment.newInstance()
+        val studentCardFragment = StudentCardFragment.newInstance(student)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, studentCardFragment)
+            .add(R.id.fragment_container, studentCardFragment)
             .addToBackStack(null)
             .commit()
     }

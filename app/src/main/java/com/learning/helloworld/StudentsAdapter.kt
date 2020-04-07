@@ -1,6 +1,5 @@
 package com.learning.helloworld
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -26,8 +25,7 @@ class StudentsAdapter(
     private val onClick : (Student) -> Unit
 ) : RecyclerView.Adapter<StudentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-        val inflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val itemView = inflater.inflate(R.layout.student, parent, false) as ConstraintLayout
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.student, parent, false) as ConstraintLayout
         return StudentViewHolder(itemView, onClick)
     }
 

@@ -19,7 +19,7 @@ class StudentsFragment : Fragment() {
 
     private var studentsLoadTask : StudentsLoadTask? = null
 
-    private var listener : StudentsLoadTask.UIListener? = null
+    lateinit var listener : StudentsLoadTask.UIListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,7 @@ class StudentsFragment : Fragment() {
             }
         }
 
-        studentsLoadTask = StudentsLoadTask(WeakReference(listener!!))
+        studentsLoadTask = StudentsLoadTask(WeakReference(listener))
         studentsLoadTask?.execute(studentsFile)
 
         studentsView = view.findViewById(R.id.students)

@@ -26,7 +26,7 @@ object StudentLoader {
     private fun generateStudents(): List<Student> {
         return generateSequence(
             1,
-            { i -> if (i < 1000) i + 1 else null }).map { i -> Student("имя$i", "фамилия$i") }
+            { i -> if (i < 1000) i + 1 else null }).map { i -> Student("Имя$i", "Фамилия$i") }
             .toList()
     }
 
